@@ -5,16 +5,9 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Version-0.1.0-blue?style=for-the-badge" alt="Version 0.1.0">
   <img src="https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white" alt="Python 3.12+">
-  <img src="https://img.shields.io/badge/Skills-5%20built--in-0f766e" alt="5 built-in skills">
-  <img src="https://img.shields.io/badge/Workers-Up%20to%2010%20parallel-16a34a" alt="Up to 10 parallel workers">
   <img src="https://img.shields.io/badge/Self--Evolving-Decomposition-0284c7" alt="Self-evolving decomposition">
-  <img src="https://img.shields.io/badge/Orchestration-LangChain%20%2B%20MCP-b91c1c" alt="LangChain + MCP">
   <img src="https://img.shields.io/badge/Interface-TUI-111827" alt="TUI interface">
-</p>
-
-<p align="center">
   <a href="https://memento.run/"><img src="https://img.shields.io/badge/Memento-Homepage-ff6f00" alt="Memento Homepage"></a>
-  <a href="https://discord.com/invite/ztFS5YmB"><img src="https://img.shields.io/badge/Discord-Community-5865F2?logo=discord&logoColor=white" alt="Discord"></a>
 </p>
 
 <p align="center">
