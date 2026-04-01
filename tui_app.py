@@ -387,7 +387,7 @@ class MementoTeams(App):
         self._max_workers: int = 5
         load_dotenv()
         self._openrouter_key: str = os.getenv("OPENROUTER_API_KEY", "")
-        self._serpapi_key: str = os.getenv("SERPAPI_API_KEY", "")
+        self._serper_key: str = os.getenv("SERPER_API_KEY", "")
         env_model = os.getenv("OPENROUTER_MODEL", "deepseek/deepseek-v3.2")
         # Use env model if it matches a known option, otherwise default
         known_values = [v for _, v in MODEL_OPTIONS]
@@ -440,8 +440,8 @@ class MementoTeams(App):
                             yield Static("OpenRouter API Key:", classes="key_label")
                             yield Input(self._openrouter_key, id="openrouter_key_input", password=True, placeholder="sk-or-...", classes="key_input")
                         with Vertical(classes="key_field"):
-                            yield Static("SerpAPI Key:", classes="key_label")
-                            yield Input(self._serpapi_key, id="serpapi_key_input", password=True, placeholder="SerpAPI key (optional)", classes="key_input")
+                            yield Static("Serper Key:", classes="key_label")
+                            yield Input(self._serper_key, id="serper_key_input", password=True, placeholder="Serper key (optional)", classes="key_input")
                 with Vertical(id="left_workers"):
                     yield Static("Workers (live)", id="title_workers", classes="section_title")
                     yield DataTable(id="workers_table")
@@ -551,8 +551,8 @@ class MementoTeams(App):
             child_env["OPENROUTER_MODEL"] = self._selected_worker_model
             if api_key:
                 child_env["OPENROUTER_API_KEY"] = api_key
-            if self._serpapi_key:
-                child_env["SERPAPI_API_KEY"] = self._serpapi_key
+            if self._serper_key:
+                child_env["SERPER_API_KEY"] = self._serper_key
             # Prevent MCP server stderr logs from corrupting Textual rendering.
             child_env["MCP_QUIET_STDERR"] = "1"
             child_env.setdefault("FASTMCP_LOG_LEVEL", "ERROR")
@@ -694,12 +694,12 @@ class MementoTeams(App):
                 if not self._task_running:
                     asyncio.create_task(self._start_orchestrator())
             return
-        if widget_id == "serpapi_key_input":
+        if widget_id == "serper_key_input":
             new_key = str(getattr(getattr(event, "input", None), "value", "") or "").strip()
-            if new_key != self._serpapi_key:
-                self._serpapi_key = new_key
-                os.environ["SERPAPI_API_KEY"] = new_key
-                self._save_env_key("SERPAPI_API_KEY", new_key)
+            if new_key != self._serper_key:
+                self._serper_key = new_key
+                os.environ["SERPER_API_KEY"] = new_key
+                self._save_env_key("SERPER_API_KEY", new_key)
             return
         value = str(getattr(getattr(event, "input", None), "value", "") or "").strip()
         if widget_id == "steps_filter_tool":

@@ -327,15 +327,15 @@ configure_env() {
         have_tty=1
     fi
 
-    local existing_api_key existing_model existing_serpapi
+    local existing_api_key existing_model existing_serper
     existing_api_key="$(_read_env_value "$env_file" "OPENROUTER_API_KEY")"
     existing_model="$(_read_env_value "$env_file" "OPENROUTER_MODEL")"
-    existing_serpapi="$(_read_env_value "$env_file" "SERPAPI_API_KEY")"
+    existing_serper="$(_read_env_value "$env_file" "SERPER_API_KEY")"
 
-    local api_key model serpapi_key
+    local api_key model serper_key
     api_key="${OPENROUTER_API_KEY:-$existing_api_key}"
     model="${OPENROUTER_MODEL:-$existing_model}"
-    serpapi_key="${SERPAPI_API_KEY:-$existing_serpapi}"
+    serper_key="${SERPER_API_KEY:-$existing_serper}"
 
     if [ "$have_tty" -eq 1 ]; then
         echo ""
@@ -345,11 +345,11 @@ configure_env() {
         echo ""
         api_key="$(_prompt_required "OPENROUTER_API_KEY" "$api_key" "1" "")"
         model="$(_prompt_required "OPENROUTER_MODEL" "$model" "0" "$DEFAULT_OPENROUTER_MODEL")"
-        serpapi_key="$(_prompt_required "SERPAPI_API_KEY" "$serpapi_key" "1" "")"
+        serper_key="$(_prompt_required "SERPER_API_KEY" "$serper_key" "1" "")"
     else
-        if [ -z "$api_key" ] || [ -z "$model" ] || [ -z "$serpapi_key" ]; then
+        if [ -z "$api_key" ] || [ -z "$model" ] || [ -z "$serper_key" ]; then
             log_error "Missing required configuration in non-interactive mode."
-            log_error "Set env vars before install: OPENROUTER_API_KEY OPENROUTER_MODEL SERPAPI_API_KEY"
+            log_error "Set env vars before install: OPENROUTER_API_KEY OPENROUTER_MODEL SERPER_API_KEY"
             exit 1
         fi
     fi
@@ -358,7 +358,7 @@ configure_env() {
     _upsert_env_value "$env_file" "OPENROUTER_API_KEY" "$api_key"
     _upsert_env_value "$env_file" "OPENROUTER_BASE_URL" "$DEFAULT_OPENROUTER_BASE_URL"
     _upsert_env_value "$env_file" "OPENROUTER_MODEL" "$model"
-    _upsert_env_value "$env_file" "SERPAPI_API_KEY" "$serpapi_key"
+    _upsert_env_value "$env_file" "SERPER_API_KEY" "$serper_key"
 
     chmod 600 "$env_file" 2>/dev/null || true
     log_success "Configured root .env"
@@ -373,7 +373,7 @@ configure_env() {
         _upsert_env_value "$memento_s_env" "OPENROUTER_API_KEY" "$api_key"
         _upsert_env_value "$memento_s_env" "OPENROUTER_BASE_URL" "$DEFAULT_OPENROUTER_BASE_URL"
         _upsert_env_value "$memento_s_env" "OPENROUTER_MODEL" "$model"
-        _upsert_env_value "$memento_s_env" "SERPAPI_API_KEY" "$serpapi_key"
+        _upsert_env_value "$memento_s_env" "SERPER_API_KEY" "$serper_key"
         _upsert_env_value "$memento_s_env" "SKILLS_DIR" "./skills"
         _upsert_env_value "$memento_s_env" "SKILLS_EXTRA_DIRS" "./skills-extra"
         _upsert_env_value "$memento_s_env" "WORKSPACE_DIR" "./workspace"

@@ -147,7 +147,7 @@ Create a `.env` file in the project root:
 OPENROUTER_API_KEY=sk-or-...
 OPENROUTER_MODEL=anthropic/claude-sonnet-4-5
 OPENROUTER_BASE_URL=https://openrouter.ai/api/v1
-SERPAPI_API_KEY=...
+SERPER_API_KEY=...
 ```
 
 Then launch:
@@ -166,7 +166,7 @@ All configuration is centralised in environment variables. Key settings:
 | `OPENROUTER_API_KEY` | — | API key for LLM calls (required) |
 | `OPENROUTER_MODEL` | `anthropic/claude-sonnet-4-5` | Model for Memento-S workers |
 | `OPENROUTER_BASE_URL` | `https://openrouter.ai/api/v1` | LLM API base URL |
-| `SERPAPI_API_KEY` | — | API key for web search skill |
+| `SERPER_API_KEY` | — | API key for web search skill (serper.dev) |
 | `MAX_WORKERS` | `10` | Max parallel workers per task |
 | `SEMANTIC_ROUTER_ENABLED` | `true` | Enable semantic skill pre-filtering |
 | `SEMANTIC_ROUTER_TOP_K` | `4` | Number of candidate skills for LLM routing |
@@ -182,7 +182,7 @@ All configuration is centralised in environment variables. Key settings:
 | --- | --- |
 | `filesystem` | Read, write, edit, search, and manage files and directories |
 | `terminal` | Execute shell commands with safety checks |
-| `web-search` | Google search via SerpAPI + URL fetching |
+| `web-search` | Google search via Serper + URL fetching |
 | `uv-pip-install` | Python package management via uv/pip |
 | `skill-creator` | Dynamically create new skills at runtime |
 
@@ -277,7 +277,7 @@ Memento-Teams/
 | Skills not found | Check that `Memento-S/skills/` exists and skill catalog is downloaded. |
 | API timeout | Increase the model timeout or switch to a faster model in `.env`. |
 | Import errors | Make sure both virtual environments are active: `Memento-S` and root. |
-| Web search fails | Check whether `SERPAPI_API_KEY` is configured in `.env`. |
+| Web search fails | Check whether `SERPER_API_KEY` is configured in `.env`. |
 | Workers stuck | Check `logs/worker-*.jsonl` for error details. Increase `MAX_WORKERS` if tasks queue. |
 | Workboard conflicts | Workers use tagged sections — check `.workboard.md` for malformed edits. |
 
