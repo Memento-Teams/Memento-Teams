@@ -4,11 +4,40 @@ description: Identifies the task type and directs the orchestrator to the correc
 ---
 
 ## How to Use
-1. Read the user's query and identify the primary organizational axis (time, entity, category, or rank).
-2. Match it against the task types below.
-3. Call `read_orchestrator_skill("decompose-<matched_type>")` to load the specialized strategy.
+1. Read the user's query carefully.
+2. Determine if it's a **short-answer research question** or a **table/list generation task**.
+3. Match it against the task types below (check short-answer types FIRST).
+4. Call `read_orchestrator_skill("decompose-<matched_type>")` to load the specialized strategy.
 
-## Task Types
+## Short-Answer Research Questions
+Check these first for queries expecting a concise answer (number, name, date, phrase):
+
+### linear-multi-hop-dependency
+**Match when:** Finding the answer requires a CHAIN: find A → use A to find B → use B to find answer. Each step depends on the previous.
+**Load skill:** `decompose-linear-multi-hop-dependency`
+**Key signals:** Nested possessives ("X的Y的Z"), "在某事件发生的那天/那年", entity defined through another entity.
+**Example:** "全球最大连锁酒店第一家酒店成立当年中国公演的歌剧原著作者安葬地所在区面积"
+
+### constrained-set-search
+**Match when:** Finding ONE entity that satisfies 3+ independent conditions. The clues are parallel, not sequential.
+**Load skill:** `decompose-constrained-set-search`
+**Key signals:** Multiple "且/并且" conditions, riddle format ("有一个X...同时...还..."), bullet-listed clues.
+**Example:** "一位艺人从韩国练习生归来，2024年9月新剧开播，收入占公司1/5"
+
+### comparative-data-extraction
+**Match when:** Look up 2+ specific data points and compute a result (difference, ratio, CAGR).
+**Load skill:** `decompose-comparative-data-extraction`
+**Key signals:** "差值/差额", "增长率", "是...的几倍", "比...多/少多少", specific dates/sources.
+**Example:** "计算美的集团2016-2019年归母净利润CAGR"
+
+### multimedia-source-verification
+**Match when:** The answer is in a specific social media post, video, or platform content.
+**Load skill:** `decompose-multimedia-source-verification`
+**Key signals:** Platform names (抖音/B站/小红书/微博), video/post references, "某期视频", uploader names.
+**Example:** "小红书博主X置顶的关于挪威视频中part2的旅行地点"
+
+## Table/List Generation Tasks
+For queries expecting structured tabular output with multiple rows:
 
 ### split-by-rank-segment
 **Match when:** The query asks for a specific "Top N" list or a numbered ranking (e.g., "Top 50 movies," "100 best-selling albums"). The request relies on a pre-existing ordinal sequence.
@@ -51,7 +80,6 @@ description: Identifies the task type and directs the orchestrator to the correc
 **Key signal:** Event logs, incident histories, timelines of discrete occurrences (not continuous product releases — use split-by-time-period for those).
 
 ## Default Fallback
-If no type matches clearly, use general decomposition principles:
-- Split by entity or category to ensure data independence.
-- Keep each worker load under 30 rows to prevent context loss.
-- Explicitly list all required columns/attributes in every subtask description.
+If no type matches clearly:
+- For **short-answer questions**: use `decompose-comparative-data-extraction`
+- For **table/list tasks**: split by entity or category, keep each worker under 30 rows

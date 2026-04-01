@@ -17,7 +17,7 @@ from langchain_openai import ChatOpenAI
 from rich.text import Text
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Vertical
-from textual.widgets import Button, DataTable, Footer, Header, Input, Select, Static, TextArea
+from textual.widgets import Button, Collapsible, DataTable, Footer, Header, Input, Select, Static, TextArea
 try:
     from textual.widgets import MarkdownViewer
 except Exception:
@@ -127,9 +127,14 @@ class MementoTeams(App):
 
     #task_input {
         height: 1fr;
-        min-height: 4;
+        min-height: 6;
         margin-bottom: 1;
         color: #dfe8f5;
+    }
+
+    #settings_collapsible {
+        height: auto;
+        padding: 0;
     }
 
     #model_row {
@@ -181,7 +186,6 @@ class MementoTeams(App):
         layout: vertical;
         height: 3;
         margin-bottom: 1;
-        dock: bottom;
     }
 
     #action_row {
@@ -405,38 +409,39 @@ class MementoTeams(App):
                 with Vertical(id="left_task"):
                     yield Static("Task", id="title_task", classes="section_title")
                     yield TextArea("", id="task_input")
-                    with Horizontal(id="model_row_compact"):
-                        with Vertical(classes="compact_field"):
-                            yield Static("Orchestrator:", id="model_label")
-                            yield Select(
-                                [(label, value) for label, value in MODEL_OPTIONS],
-                                id="model_select",
-                                value=self._selected_model,
-                                allow_blank=False,
-                            )
-                        with Vertical(classes="compact_field"):
-                            yield Static("Worker:", id="worker_model_label")
-                            yield Select(
-                                [(label, value) for label, value in MODEL_OPTIONS],
-                                id="worker_model_select",
-                                value=self._selected_worker_model,
-                                allow_blank=False,
-                            )
-                        with Vertical(classes="compact_field"):
-                            yield Static("Workers:", id="workers_label")
-                            yield Input("5", id="workers_count", type="integer", max_length=3)
-                    with Vertical(classes="key_field"):
-                        yield Static("OpenRouter API Key:", classes="key_label")
-                        yield Input(self._openrouter_key, id="openrouter_key_input", password=True, placeholder="sk-or-...", classes="key_input")
-                    with Vertical(classes="key_field"):
-                        yield Static("SerpAPI Key:", classes="key_label")
-                        yield Input(self._serpapi_key, id="serpapi_key_input", password=True, placeholder="SerpAPI key (optional)", classes="key_input")
                     with Horizontal(id="task_controls"):
                         with Horizontal(id="action_row"):
                             yield Button("Run Task", id="run_task", variant="primary")
                             yield Button("Stop", id="stop_task", variant="error", disabled=True)
                             yield Button("Clear", id="clear_task", variant="default")
                             yield Select(self._load_example_options(), id="example_select", prompt="Load Example", allow_blank=True)
+                    with Collapsible(title="Settings", id="settings_collapsible", collapsed=True):
+                        with Horizontal(id="model_row_compact"):
+                            with Vertical(classes="compact_field"):
+                                yield Static("Orchestrator:", id="model_label")
+                                yield Select(
+                                    [(label, value) for label, value in MODEL_OPTIONS],
+                                    id="model_select",
+                                    value=self._selected_model,
+                                    allow_blank=False,
+                                )
+                            with Vertical(classes="compact_field"):
+                                yield Static("Worker:", id="worker_model_label")
+                                yield Select(
+                                    [(label, value) for label, value in MODEL_OPTIONS],
+                                    id="worker_model_select",
+                                    value=self._selected_worker_model,
+                                    allow_blank=False,
+                                )
+                            with Vertical(classes="compact_field"):
+                                yield Static("Workers:", id="workers_label")
+                                yield Input("5", id="workers_count", type="integer", max_length=3)
+                        with Vertical(classes="key_field"):
+                            yield Static("OpenRouter API Key:", classes="key_label")
+                            yield Input(self._openrouter_key, id="openrouter_key_input", password=True, placeholder="sk-or-...", classes="key_input")
+                        with Vertical(classes="key_field"):
+                            yield Static("SerpAPI Key:", classes="key_label")
+                            yield Input(self._serpapi_key, id="serpapi_key_input", password=True, placeholder="SerpAPI key (optional)", classes="key_input")
                 with Vertical(id="left_workers"):
                     yield Static("Workers (live)", id="title_workers", classes="section_title")
                     yield DataTable(id="workers_table")

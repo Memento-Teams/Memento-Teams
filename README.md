@@ -1,139 +1,145 @@
-# Memento Teams
+<h1 align="center">Memento-Teams: Multi-Agent Orchestration with Self-Evolving Decomposition</h1>
 
-Multi-agent orchestration system that decomposes complex tasks into parallel subtasks and executes them using skill-based worker agents. Includes a self-improving eval pipeline that learns decomposition strategies from past runs.
+<h3 align="center"><b>Decompose complex tasks. Dispatch parallel workers. Evolve better strategies from every run.</b></h3>
 
-## Quick Start
+<p align="center">
+  <img src="https://img.shields.io/badge/Version-0.1.0-blue?style=for-the-badge" alt="Version 0.1.0">
+  <img src="https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white" alt="Python 3.12+">
+  <img src="https://img.shields.io/badge/Skills-5%20built--in-0f766e" alt="5 built-in skills">
+  <img src="https://img.shields.io/badge/Workers-Up%20to%2010%20parallel-16a34a" alt="Up to 10 parallel workers">
+  <img src="https://img.shields.io/badge/Self--Evolving-Decomposition-0284c7" alt="Self-evolving decomposition">
+  <img src="https://img.shields.io/badge/Orchestration-LangChain%20%2B%20MCP-b91c1c" alt="LangChain + MCP">
+  <img src="https://img.shields.io/badge/Interface-TUI-111827" alt="TUI interface">
+</p>
+
+<p align="center">
+  <a href="https://memento.run/"><img src="https://img.shields.io/badge/Memento-Homepage-ff6f00" alt="Memento Homepage"></a>
+  <a href="https://discord.com/invite/ztFS5YmB"><img src="https://img.shields.io/badge/Discord-Community-5865F2?logo=discord&logoColor=white" alt="Discord"></a>
+</p>
+
+<p align="center">
+  <a href="#benchmark-results">Benchmark Results</a> ·
+  <a href="#one-click-install">Install</a> ·
+  <a href="#quick-start-developer">Quick Start</a> ·
+  <a href="#what-is-memento-teams">What Is This</a> ·
+  <a href="#what-makes-it-different">Why It Matters</a> ·
+  <a href="#memento-ecosystem">Ecosystem</a> ·
+  <a href="#citation">Citation</a>
+</p>
+
+<p align="center">
+  <a href="#what-is-memento-teams"><b>English</b></a> ·
+  <a href="#chinese-summary"><b>中文摘要</b></a>
+</p>
+
+<table>
+<tr><td>
+<p align="center">
+  <img src="figures/team.png" width="100%" alt="Memento-Teams architecture">
+</p>
+<p align="center"><sub>The architecture of Memento-Teams. A user submits a task through the TUI. The <b>Orchestrator Agent</b> loads evolved decomposition strategies (orchestrator skills) and uses an LLM to break the task into self-contained subtasks with a shared workboard. Subtasks are dispatched in parallel to <b>Memento-S worker agents</b> via an MCP server. Each worker independently routes to the best skill, executes multi-round operations, and coordinates with other workers through the shared workboard. Results are aggregated and synthesised into a final response.</sub></p>
+</td></tr>
+</table>
+
+---
+
+## Benchmark Results
+
+We evaluate Memento-Teams on two challenging benchmarks:
+
+- [**WideSearch**](https://widesearch.github.io/) — a benchmark for complex, multi-step information retrieval tasks requiring parallel search, data extraction, and structured output across diverse domains.
+- [**XBench-DeepSearch**](https://arxiv.org/abs/2505.03829) — a benchmark for evaluating deep research capabilities on real-world questions requiring multi-hop reasoning and comprehensive web search.
+
+<table>
+<tr>
+<td width="50%">
+<p align="center">
+  <img src="figures/widesearch_en.png" width="100%" alt="WideSearch-EN bubble chart">
+</p>
+</td>
+<td width="50%">
+<p align="center">
+  <img src="figures/xbench_deepsearch.png" width="100%" alt="XBench-DeepSearch bar chart">
+</p>
+</td>
+</tr>
+</table>
+
+<p align="center"><sub><b>Left:</b> Bubble chart on WideSearch-EN (Avg@4). Position encodes Row F1 (x-axis) and Item F1 (y-axis); bubble size encodes Success Rate. Memento-Teams dominates all three metrics simultaneously. <b>Right:</b> Accuracy on XBench-DeepSearch. Memento-Teams achieves 68.0%, surpassing all open-source agentic models and rivalling frontier proprietary systems.</sub></p>
+
+---
+
+> **Core question.** Memento-Teams is not about building yet another chatbot wrapper.
+> It is about **how to decompose hard tasks into parallel subtasks, coordinate workers effectively, and evolve better decomposition strategies from every run**.
+
+<table>
+<tr>
+<td width="33%" valign="top">
+<b>Decompose intelligently</b><br>
+Evolved orchestrator skills route tasks to the best decomposition strategy — split by entity, time, category, rank, or dependency.
+</td>
+<td width="33%" valign="top">
+<b>Execute in parallel</b><br>
+Up to 10 Memento-S workers run concurrently, coordinating through a shared workboard to avoid redundant work and merge partial results.
+</td>
+<td width="33%" valign="top">
+<b>Evolve from experience</b><br>
+Decomposition strategies are evolved from past task executions — the system clusters task patterns and generates specialised orchestrator skills automatically.
+</td>
+</tr>
+</table>
+
+## Key Features
+
+| Feature | Why it matters |
+| --- | --- |
+| **Multi-agent orchestration via MCP** | An orchestrator agent decomposes tasks and dispatches subtasks to parallel workers through a FastMCP server, enabling true concurrent execution rather than sequential tool calls. |
+| **Learned decomposition strategies** | Decomposition strategies (task-router + 11 decompose-* patterns) are learned from task experience, so the system continuously improves how it breaks down different types of tasks. |
+| **Shared workboard coordination** | Workers read and edit a shared markdown workboard for inter-agent communication — claim sections, post partial results, and avoid duplicate work without central locking. |
+| **Semantic skill routing** | BM25 + sentence-transformer embeddings + LLM selection ensure each worker picks the best skill for its subtask, even as the skill library grows. |
+| **Ops-based execution engine** | Workers use a JSON ops architecture (not function calling) with filesystem, terminal, web, workboard, and meta operations, enabling fine-grained multi-round execution within each skill. |
+| **Textual TUI** | A rich terminal interface for submitting tasks, inspecting per-worker execution steps, viewing live workboard state, and reading the final synthesised output. |
+
+## What Is Memento-Teams?
+
+Memento-Teams is a **multi-agent orchestration system** that decomposes complex tasks into parallel subtasks and executes them using skill-based worker agents. The orchestrator is built on LangChain and communicates with a pool of Memento-S workers via MCP (Model Context Protocol).
+
+What makes it interesting is not just parallel execution. It is the **evolved decomposition strategies**. The system ships with 11 specialised decompose-* skills and a task-router, all evolved from task experience. When a new task arrives, the router selects the best decomposition pattern — so different types of tasks are broken down in different ways.
+
+## What Makes It Different?
+
+Memento-Teams is built around a `Route → Decompose → Execute → Synthesise` loop.
+
+| Phase | What it means |
+| --- | --- |
+| **Route** | The orchestrator loads evolved decomposition strategies (orchestrator skills). A task-router identifies which decomposition pattern best fits the incoming task — split by entity, time period, category, rank segment, or other evolved patterns. |
+| **Decompose** | The matched decompose-* skill guides the LLM to break the task into self-contained subtasks, each with clear instructions, and creates a shared workboard for inter-worker coordination. |
+| **Execute** | Subtasks are dispatched in parallel to up to 10 Memento-S workers via MCP. Each worker independently routes to the best skill, executes multi-round operations, and coordinates with other workers through the shared workboard (claim sections, post partial results, avoid duplicate work). |
+| **Synthesise** | The orchestrator aggregates worker results, resolves conflicts, and produces a final structured response. |
+
+This is the key difference from systems that simply fan out subtasks to workers. Memento-Teams uses **evolved orchestrator skills** to decide *how* to decompose each task, rather than relying on a single generic prompt.
+
+---
+
+## One-Click Install
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/nj19257/memento-team/demo_test/install.sh | bash
-```
-
-Then launch the TUI:
-
-```bash
-memento-teams
-```
-
-## Architecture
-
-```
-User Query (TUI)
-    |
-    v
-Orchestrator Agent (LangChain)
-    |  1. Load orchestrator skills (task-router → decompose-*)
-    |  2. LLM decomposes task into subtasks
-    |  3. Create workboard for worker coordination
-    |
-    +-- calls MCP tool: execute_subtasks(["subtask1", ...], workboard="...")
-                |
-                v
-        MCP Server (FastMCP, stdio transport)
-            |-- Worker 0: MementoSAgent → route_skill() → run_one_skill_loop()
-            |-- Worker 1: MementoSAgent → route_skill() → run_one_skill_loop()
-            +-- Worker N: MementoSAgent → route_skill() → run_one_skill_loop()
-                |   (shared AppContext: embeddings, skill catalog, ChromaDB)
-                |   (workboard coordination via read/edit_workboard)
-                v
-        Aggregated results returned to orchestrator
-                |
-                v
-        Orchestrator synthesizes final response
-```
-
-## Key Components
-
-| File | Purpose |
-|---|---|
-| [tui_app.py](tui_app.py) | Textual TUI — primary interface for submitting tasks and inspecting workers |
-| [orchestrator/orchestrator_agent.py](orchestrator/orchestrator_agent.py) | LangChain-based orchestrator that decomposes tasks and dispatches to workers via MCP |
-| [orchestrator/mcp_server.py](orchestrator/mcp_server.py) | FastMCP server exposing `execute_subtasks`, workboard, and skill tools — runs up to 10 workers in parallel |
-| [Memento-S/core/agent/memento_s_agent.py](Memento-S/core/agent/memento_s_agent.py) | Worker agent — skill routing, planning, and execution |
-| [Memento-S/core/config.py](Memento-S/core/config.py) | Centralized configuration from environment variables |
-| [Memento-S/core/router.py](Memento-S/core/router.py) | Skill routing — BM25 + sentence-transformers (BAAI/bge-m3) + LLM selection |
-| [orchestrator_skills/](orchestrator_skills/) | Auto-generated decomposition strategies (task-router + decompose-* skills) |
-
-## Self-Improving Eval Pipeline
-
-Memento Teams includes a learning loop that automatically improves the orchestrator's decomposition strategies:
-
-```
- Run (eval/run.py)          Verify (eval/verify.py)         Reflect (eval/reflect.py)
-┌──────────────────┐    ┌───────────────────────────┐    ┌──────────────────────────┐
-│ Execute tasks    │───>│ Compare output vs gold    │───>│ Cluster tasks by pattern │
-│ via orchestrator │    │ Score accuracy per column  │    │ Generate decompose skills│
-│ Save outputs &   │    │ Generate error report      │    │ Generate task-router     │
-│ worker logs      │    │ Compress trajectories      │    │ Write to orchestrator_   │
-└──────────────────┘    └───────────────────────────┘    │ skills/                  │
-                                                         └──────────────────────────┘
-```
-
-**One-click learning:**
-
-```bash
-./eval/learn.sh                    # Run all tasks → verify → reflect
-./eval/learn.sh --parallel         # Run tasks concurrently
-./eval/learn.sh --skip-run         # Re-verify + reflect only (reuse existing outputs)
-```
-
-**Individual stages:**
-
-```bash
-python eval/run.py --parallel                  # Run eval tasks
-python eval/verify.py                          # Verify against gold answers
-python eval/reflect.py                         # Generate new orchestrator skills
-```
-
-The pipeline uses 200 WideSearch benchmark tasks (100 EN + 100 ZH), with 41 tasks having gold CSV answers for automated scoring.
-
-## Built-in Skills
-
-| Skill | Description |
-|---|---|
-| `filesystem` | Read, write, edit, search, and manage files and directories |
-| `terminal` | Execute shell commands with safety checks |
-| `web-search` | Google search via SerpAPI + URL fetching |
-| `uv-pip-install` | Python package management via uv/pip |
-| `skill-creator` | Dynamically create new skills at runtime |
-
-Workers automatically select the best skill for each subtask via semantic routing (BM25 + embeddings + LLM). If no existing skill matches, the system can dynamically fetch or create new skills on demand.
-
-## How It Works
-
-1. **User** submits a task via the TUI
-2. **Orchestrator** loads orchestrator skills (task-router identifies decomposition type)
-3. **Orchestrator** LLM decomposes task into self-contained subtasks with a shared workboard
-4. **Orchestrator** calls `execute_subtasks()` on the MCP server
-5. **MCP server** runs each subtask through a Memento-S worker:
-   - `route_skill()` — semantic pre-filter (BM25/embeddings) + LLM picks the best skill
-   - `run_one_skill_loop()` — loads `SKILL.md`, generates a JSON operation plan, executes bridge ops, loops until done
-   - Workers coordinate via workboard (read/edit tagged sections)
-6. **MCP server** returns aggregated results
-7. **Orchestrator** synthesizes worker results into a final response
-
-## Setup
-
-### One-Click Install
-
-```bash
-curl -sSL https://raw.githubusercontent.com/nj19257/memento-team/demo_test/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/Memento-Teams/Memento-Teams/main/install.sh | bash
 ```
 
 The installer will:
 - Install `uv` (if not present)
-- Clone the repo (branch `demo_test`)
-- Install all dependencies (`Memento-S` + orchestrator)
+- Clone the repository
+- Install all dependencies (Memento-S + orchestrator)
 - Download router assets (skill catalog + optional embeddings)
 - Configure `.env` interactively (API keys)
 - Create the `memento-teams` command
 
-### Manual Setup
-
-Prerequisites: Python 3.12+, `uv`, git
+## Quick Start (Developer)
 
 ```bash
-git clone --branch demo_test https://github.com/nj19257/memento-team.git
-cd memento-team
+git clone https://github.com/Memento-Teams/Memento-Teams.git
+cd Memento-Teams
 
 # Install Memento-S worker dependencies
 cd Memento-S && uv sync --python 3.12 && cd ..
@@ -151,44 +157,19 @@ OPENROUTER_BASE_URL=https://openrouter.ai/api/v1
 SERPAPI_API_KEY=...
 ```
 
-### Run
+Then launch:
 
 ```bash
 memento-teams
 ```
 
-Or directly:
+<details>
+<summary><b>Configuration</b></summary>
 
-```bash
-uv run python -c "from tui_app import MementoTeams; MementoTeams().run()"
-```
-
-## TUI
-
-```bash
-memento-teams
-```
-
-- Submit tasks directly from the interface (`Ctrl+Enter` or **Run Task**)
-- Session-scoped worker list from `logs/worker-*.jsonl` (current task only)
-- Per-worker status label (`live` / `finished`)
-- Click any worker row to inspect execution steps/events
-- Live workboard view from `Memento-S/workspace/.workboard.md`
-- Workboard history is preserved per session as `.workboard-<session_id>.md`
-- Final orchestrator output panel
-
-Controls:
-
-- `Ctrl+Enter`: Run task
-- `r`: Refresh worker list
-- `q`: Quit
-
-## Configuration
-
-All configuration is centralized in [Memento-S/core/config.py](Memento-S/core/config.py) and read from environment variables. Key settings:
+All configuration is centralised in environment variables. Key settings:
 
 | Variable | Default | Description |
-|---|---|---|
+| --- | --- | --- |
 | `OPENROUTER_API_KEY` | — | API key for LLM calls (required) |
 | `OPENROUTER_MODEL` | `anthropic/claude-sonnet-4-5` | Model for Memento-S workers |
 | `OPENROUTER_BASE_URL` | `https://openrouter.ai/api/v1` | LLM API base URL |
@@ -200,48 +181,152 @@ All configuration is centralized in [Memento-S/core/config.py](Memento-S/core/co
 | `DEBUG` | `false` | Enable debug logging |
 | `WORKSPACE_DIR` | `Memento-S/workspace` | Workboard location shown in TUI |
 
-## Project Structure
+</details>
 
+## Built-in Skills
+
+| Skill | Description |
+| --- | --- |
+| `filesystem` | Read, write, edit, search, and manage files and directories |
+| `terminal` | Execute shell commands with safety checks |
+| `web-search` | Google search via SerpAPI + URL fetching |
+| `uv-pip-install` | Python package management via uv/pip |
+| `skill-creator` | Dynamically create new skills at runtime |
+
+Workers automatically select the best skill for each subtask via semantic routing (BM25 + embeddings + LLM). If no existing skill matches, the system can dynamically fetch or create new skills on demand.
+
+## TUI
+
+```bash
+memento-teams
 ```
-memento-team/
+
+- Submit tasks directly from the interface (`Ctrl+Enter` or **Run Task**)
+- Session-scoped worker list with per-worker status (`live` / `finished`)
+- Click any worker row to inspect execution steps and events
+- Live workboard view showing real-time inter-worker coordination
+- Final orchestrator output panel
+
+| Shortcut | Action |
+| --- | --- |
+| `Ctrl+Enter` | Run task |
+| `r` | Refresh worker list |
+| `c` | Copy final output to clipboard |
+| `q` | Quit |
+
+## Developer Notes
+
+<details>
+<summary><b>Project structure</b></summary>
+
+```text
+Memento-Teams/
+├── tui_app.py                          # Textual TUI — primary interface
+├── main.py                             # Standalone entry point (non-TUI)
 ├── install.sh                          # One-click installer
 ├── pyproject.toml                      # Root project (orchestrator deps + entry point)
-├── tui_app.py                          # Textual TUI
-├── main.py                             # Standalone entry point (non-TUI)
 ├── orchestrator/
 │   ├── orchestrator_agent.py           # LangChain orchestrator agent
 │   └── mcp_server.py                   # FastMCP server (execute_subtasks + workboard)
 ├── orchestrator_skills/                # Auto-generated decomposition strategies
-│   ├── task-router/SKILL.md            # Routes queries to decompose strategies
+│   ├── task-router/                    # Routes queries to decompose strategies
+│   ├── workboard/                      # Shared workboard coordination
 │   ├── decompose-split-by-entity/      # Split by entity/brand
 │   ├── decompose-split-by-time-period/ # Split by chronological range
 │   ├── decompose-split-by-category/    # Split by categorical dimension
 │   ├── decompose-split-by-rank-segment/# Split by rank ranges
-│   └── ...                             # More patterns auto-generated by reflect.py
-├── eval/
-│   ├── learn.sh                        # One-click learning pipeline (run → verify → reflect)
-│   ├── run.py                          # Batch eval task runner
-│   ├── verify.py                       # Verification & scoring vs gold answers
-│   ├── reflect.py                      # Self-reflection → skill generation
-│   ├── utils.py                        # Shared eval utilities
-│   ├── widesearch.jsonl                # 200 WideSearch benchmark tasks
-│   ├── gold/                           # Gold CSV answers (41 tasks)
-│   ├── outputs/                        # System outputs (*.md)
-│   └── reports/                        # Run manifests & verify reports
-├── Memento-S/
-│   ├── pyproject.toml                  # Worker dependencies
+│   ├── decompose-annual-rank-stats/    # Annual ranking statistics
+│   ├── decompose-comparative-data-extraction/ # Comparative data extraction
+│   ├── decompose-constrained-set-search/      # Constrained set search
+│   ├── decompose-entity-benchmarking/  # Entity benchmarking
+│   ├── decompose-geographic-registries/# Geographic registry lookup
+│   ├── decompose-linear-multi-hop-dependency/ # Linear multi-hop dependency
+│   ├── decompose-multimedia-source-verification/ # Multimedia source verification
+│   └── decompose-temporal-event-logs/  # Temporal event log extraction
+├── Memento-S/                          # Worker agent (submodule)
 │   ├── core/
 │   │   ├── agent/memento_s_agent.py    # Worker agent class
 │   │   ├── config.py                   # Configuration & constants
-│   │   ├── router.py                   # Skill routing logic
+│   │   ├── router.py                   # Skill routing (BM25 + embeddings + LLM)
 │   │   ├── llm.py                      # LLM wrapper (OpenRouter)
-│   │   ├── skills/                     # Skill management & providers
+│   │   ├── skill_engine/               # Planning, execution, bridge ops
 │   │   └── tools/                      # Tool implementations
 │   └── skills/                         # Built-in skill definitions
-│       ├── filesystem/
-│       ├── terminal/
-│       ├── web-search/
-│       ├── uv-pip-install/
-│       └── skill-creator/
+├── figures/                            # README figures
+├── docs/                               # Documentation
 └── logs/                               # Worker trajectory logs (*.jsonl)
 ```
+
+</details>
+
+<details>
+<summary><b>Tech stack</b></summary>
+
+| Layer | Technology |
+| --- | --- |
+| Interface | Textual (TUI) |
+| Orchestration | LangChain + MCP (Model Context Protocol) |
+| Worker framework | Memento-S (ops-based skill execution) |
+| LLM access | OpenRouter (multi-provider) |
+| Skill routing | BM25 (jieba) + sentence-transformers (BAAI/bge-m3) + LLM selection |
+| MCP transport | FastMCP (stdio) |
+| Coordination | Shared workboard (thread-safe markdown read/write/edit) |
+| Execution | uv sandbox + subprocess isolation |
+| Async runtime | asyncio |
+| Build and packaging | uv + hatchling |
+
+</details>
+
+## FAQ
+
+| Problem | Solution |
+| --- | --- |
+| Skills not found | Check that `Memento-S/skills/` exists and skill catalog is downloaded. |
+| API timeout | Increase the model timeout or switch to a faster model in `.env`. |
+| Import errors | Make sure both virtual environments are active: `Memento-S` and root. |
+| Web search fails | Check whether `SERPAPI_API_KEY` is configured in `.env`. |
+| Workers stuck | Check `logs/worker-*.jsonl` for error details. Increase `MAX_WORKERS` if tasks queue. |
+| Workboard conflicts | Workers use tagged sections — check `.workboard.md` for malformed edits. |
+
+## Memento Ecosystem
+
+Memento-Teams is part of the broader **Memento** project family.
+
+| Resource | Link | Description |
+| --- | --- | --- |
+| **Memento Homepage** | [memento.run](https://memento.run/) | The hub for all Memento series projects and research |
+| **Memento-Skills** | [GitHub](https://github.com/Memento-Teams/Memento-Skills) | Single-agent self-evolving skill framework |
+| **Memento-Teams** | [GitHub](https://github.com/Memento-Teams/Memento-Teams) | Multi-agent orchestration with self-improving decomposition (this repo) |
+| **Discord Community** | [Join Discord](https://discord.com/invite/ztFS5YmB) | Discussion, Q&A, feature requests, and collaboration |
+
+## Citation
+
+If you find Memento-Teams useful in your research, please cite:
+
+```bibtex
+@article{memento-teams2026,
+  title={Memento-Teams: Multi-Agent Orchestration with Self-Improving Decomposition},
+  author={},
+  journal={arXiv preprint},
+  year={2026}
+}
+```
+
+> Paper coming soon. Citation will be updated with full author list and arXiv ID upon publication.
+
+## Chinese Summary
+
+<details>
+<summary><b>点击展开中文摘要</b></summary>
+
+Memento-Teams 是一个多智能体协作系统，核心思路是将复杂任务分解为可并行执行的子任务，由多个 Memento-S 工作智能体同时处理，并通过共享工作板（workboard）进行协调。
+
+系统围绕 `路由 → 分解 → 执行 → 合成` 的在线流程构建。编排智能体（Orchestrator）通过 task-router 识别任务类型，匹配最佳的 decompose-* 分解策略，将任务拆分为独立子任务；工作智能体通过语义路由选择最佳技能并行执行，通过共享 workboard 进行协调；最后编排智能体聚合结果，生成最终响应。
+
+在 WideSearch-EN 基准测试中，Memento-Teams 在 Row F1（63.5）、Item F1（80.1）和 Success Rate（38.5）三项指标上全面超越 o3-high、Gemini 2.5 Pro、Claude Sonnet 4 等前沿基线。在 XBench-DeepSearch 上达到 68.0% 准确率，超越所有开源智能体模型，接近前沿商业系统。
+
+</details>
+
+## Licence
+
+MIT
