@@ -1,6 +1,25 @@
-<h1 align="center">Memento-Teams: Multi-Agent Orchestration with Self-Evolving Decomposition</h1>
+<p align="center">
+  <img src="figures/logo.svg" width="80" alt="Memento-Teams logo">
+</p>
 
-<h3 align="center"><b>Decompose complex tasks. Dispatch parallel workers. Evolve better strategies from every run.</b></h3>
+<h1 align="center">Memento-Teams</h1>
+
+<h3 align="center"><b>Multi-Agent Orchestration with Self-Evolving Decomposition</b></h3>
+
+<p align="center">Decompose complex tasks. Dispatch parallel workers. Evolve better strategies from every run.</p>
+
+<p align="center">
+  <a href="#what-is-memento-teams"><b>English</b></a> ·
+  <a href="#chinese-summary"><b>中文摘要</b></a>
+</p>
+
+---
+
+## What Is Memento-Teams?
+
+Memento-Teams is a **multi-agent orchestration system** that decomposes complex tasks into parallel subtasks and executes them using skill-based worker agents. The orchestrator is built on LangChain and communicates with a pool of Memento-S workers via MCP (Model Context Protocol).
+
+What makes it interesting is not just parallel execution. It is the **evolved decomposition strategies**. The system ships with 11 specialised decompose-* skills and a task-router, all evolved from task experience. When a new task arrives, the router selects the best decomposition pattern — so different types of tasks are broken down in different ways.
 
 <p align="center">
   <img src="https://img.shields.io/badge/Version-0.1.0-blue?style=for-the-badge" alt="Version 0.1.0">
@@ -14,34 +33,11 @@
   <a href="#benchmark-results">Benchmark Results</a> ·
   <a href="#one-click-install">Install</a> ·
   <a href="#quick-start-developer">Quick Start</a> ·
-  <a href="#what-is-memento-teams">What Is This</a> ·
+  <a href="#key-features">Key Features</a> ·
   <a href="#what-makes-it-different">Why It Matters</a> ·
   <a href="#memento-ecosystem">Ecosystem</a> ·
   <a href="#citation">Citation</a>
 </p>
-
-<p align="center">
-  <a href="#what-is-memento-teams"><b>English</b></a> ·
-  <a href="#chinese-summary"><b>中文摘要</b></a>
-</p>
-
-<table>
-<tr><td>
-<p align="center">
-  <img src="figures/team.png" width="100%" alt="Memento-Teams architecture">
-</p>
-<p align="center"><sub>The architecture of Memento-Teams. A user submits a task through the TUI. The <b>Orchestrator Agent</b> loads evolved decomposition strategies (orchestrator skills) and uses an LLM to break the task into self-contained subtasks with a shared workboard. Subtasks are dispatched in parallel to <b>Memento-S worker agents</b> via an MCP server. Each worker independently routes to the best skill, executes multi-round operations, and coordinates with other workers through the shared workboard. Results are aggregated and synthesised into a final response.</sub></p>
-</td></tr>
-</table>
-
-<table>
-<tr><td>
-<p align="center">
-  <img src="figures/game.png" width="100%" alt="Memento-Teams game-theoretic framework">
-</p>
-<p align="center"><sub>The game-theoretic framework of Memento-Teams. The <b>Upper-Level Leader</b> (Orchestrator) reads decomposition strategies from memory and decomposes tasks into subtasks. The <b>Low-Level Follower</b> dispatches subtasks to parallel workers, each optimising its own objective while reading from and writing to a <b>Shared Memory Buffer</b> (Workboard). Both orchestrator memory and workboard are updated through a memory-write mechanism, enabling coordinated multi-agent execution.</sub></p>
-</td></tr>
-</table>
 
 ---
 
@@ -52,24 +48,60 @@ We evaluate Memento-Teams on two challenging benchmarks:
 - [**WideSearch**](https://widesearch.github.io/) — a benchmark for complex, multi-step information retrieval tasks requiring parallel search, data extraction, and structured output across diverse domains.
 - [**XBench-DeepSearch**](https://arxiv.org/abs/2505.03829) — a benchmark for evaluating deep research capabilities on real-world questions requiring multi-hop reasoning and comprehensive web search.
 
+### WideSearch-EN (Avg@4)
+
+| Model | Row F1 | Item F1 | Success Rate |
+| --- | ---: | ---: | ---: |
+| Doubao-1.6 | 34.0 | 54.6 | 2.5 |
+| Gemini 2.5 Pro | 36.6 | 59.1 | 4.3 |
+| o3-high | 37.8 | 57.3 | 5.1 |
+| Claude Sonnet 4 | 38.5 | 62.2 | 3.6 |
+| **Memento-Teams (Ours)** | **63.5** | **80.1** | **38.5** |
+
 <table>
 <tr>
 <td width="50%">
 <p align="center">
   <img src="figures/widesearch_en.png" width="100%" alt="WideSearch-EN bubble chart">
 </p>
+<p align="center"><b>WideSearch-EN</b></p>
 <p align="center"><sub>Performance landscape on WideSearch-EN (Avg@4). Position encodes Row F1 (x) and Item F1 (y); label encodes Success Rate. Dashed lines show frontier single-agent Item F1.</sub></p>
 </td>
 <td width="50%">
 <p align="center">
   <img src="figures/xbench_deepsearch.png" width="100%" alt="XBench-DeepSearch bar chart">
 </p>
+<p align="center"><b>XBench-DeepSearch</b></p>
 <p align="center"><sub>Accuracy on XBench-DeepSearch. Memento-Teams (68.0%) surpasses all open-source agentic models and rivals frontier proprietary systems.</sub></p>
 </td>
 </tr>
 </table>
 
 ---
+
+<table>
+<tr><td>
+<p align="center">
+  <img src="figures/team.png" width="100%" alt="Memento-Teams architecture">
+</p>
+<p align="center"><b>System Architecture</b></p>
+<p align="center"><sub>The architecture of Memento-Teams. A user submits a task through the TUI. The <b>Orchestrator Agent</b> loads evolved decomposition strategies (orchestrator skills) and uses an LLM to break the task into self-contained subtasks with a shared workboard. Subtasks are dispatched in parallel to <b>Memento-S worker agents</b> via an MCP server. Each worker independently routes to the best skill, executes multi-round operations, and coordinates with other workers through the shared workboard. Results are aggregated and synthesised into a final response.</sub></p>
+</td></tr>
+</table>
+
+<table>
+<tr><td>
+<p align="center">
+  <img src="figures/game.png" width="100%" alt="Memento-Teams game-theoretic framework">
+</p>
+<p align="center"><b>Game-Theoretic Framework</b></p>
+<p align="center"><sub>The game-theoretic framework of Memento-Teams. The <b>Upper-Level Leader</b> (Orchestrator) reads decomposition strategies from memory and decomposes tasks into subtasks. The <b>Low-Level Follower</b> dispatches subtasks to parallel workers, each optimising its own objective while reading from and writing to a <b>Shared Memory Buffer</b> (Workboard). Both orchestrator memory and workboard are updated through a memory-write mechanism, enabling coordinated multi-agent execution.</sub></p>
+</td></tr>
+</table>
+
+---
+
+## Key Features
 
 > **Core question.** Memento-Teams is not about building yet another chatbot wrapper.
 > It is about **how to decompose hard tasks into parallel subtasks, coordinate workers effectively, and evolve better decomposition strategies from every run**.
@@ -91,8 +123,6 @@ Decomposition strategies are evolved from past task executions — the system cl
 </tr>
 </table>
 
-## Key Features
-
 | Feature | Why it matters |
 | --- | --- |
 | **Multi-agent orchestration via MCP** | An orchestrator agent decomposes tasks and dispatches subtasks to parallel workers through a FastMCP server, enabling true concurrent execution rather than sequential tool calls. |
@@ -101,12 +131,6 @@ Decomposition strategies are evolved from past task executions — the system cl
 | **Semantic skill routing** | BM25 + sentence-transformer embeddings + LLM selection ensure each worker picks the best skill for its subtask, even as the skill library grows. |
 | **Ops-based execution engine** | Workers use a JSON ops architecture (not function calling) with filesystem, terminal, web, workboard, and meta operations, enabling fine-grained multi-round execution within each skill. |
 | **Textual TUI** | A rich terminal interface for submitting tasks, inspecting per-worker execution steps, viewing live workboard state, and reading the final synthesised output. |
-
-## What Is Memento-Teams?
-
-Memento-Teams is a **multi-agent orchestration system** that decomposes complex tasks into parallel subtasks and executes them using skill-based worker agents. The orchestrator is built on LangChain and communicates with a pool of Memento-S workers via MCP (Model Context Protocol).
-
-What makes it interesting is not just parallel execution. It is the **evolved decomposition strategies**. The system ships with 11 specialised decompose-* skills and a task-router, all evolved from task experience. When a new task arrives, the router selects the best decomposition pattern — so different types of tasks are broken down in different ways.
 
 ## What Makes It Different?
 
@@ -224,6 +248,8 @@ memento-teams
 | `r` | Refresh worker list |
 | `c` | Copy final output to clipboard |
 | `q` | Quit |
+
+<!-- Demo video placeholder — will be added later -->
 
 ## Developer Notes
 
