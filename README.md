@@ -234,7 +234,9 @@ memento-teams
 | `c` | Copy final output to clipboard |
 | `q` | Quit |
 
-<!-- Demo video placeholder — will be added later -->
+## Demo
+
+<!-- Demo video will be added here -->
 
 ## Developer Notes
 
