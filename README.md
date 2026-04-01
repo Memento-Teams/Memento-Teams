@@ -34,6 +34,15 @@
 </td></tr>
 </table>
 
+<table>
+<tr><td>
+<p align="center">
+  <img src="figures/game.png" width="100%" alt="Memento-Teams game-theoretic framework">
+</p>
+<p align="center"><sub>The game-theoretic framework of Memento-Teams. The <b>Upper-Level Leader</b> (Orchestrator) reads decomposition strategies from memory and decomposes tasks into subtasks. The <b>Low-Level Follower</b> dispatches subtasks to parallel workers, each optimising its own objective while reading from and writing to a <b>Shared Memory Buffer</b> (Workboard). Both orchestrator memory and workboard are updated through a memory-write mechanism, enabling coordinated multi-agent execution.</sub></p>
+</td></tr>
+</table>
+
 ---
 
 ## Benchmark Results
