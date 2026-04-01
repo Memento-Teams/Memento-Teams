@@ -129,9 +129,14 @@ This is the key difference from systems that simply fan out subtasks to workers.
 curl -sSL https://raw.githubusercontent.com/Memento-Teams/Memento-Teams/main/install.sh | bash
 ```
 
+<table>
+<tr><td>
 <p align="center">
-  <img src="figures/terminal-demo.gif" width="80%" alt="Memento-Teams install and launch demo">
+  <img src="figures/terminal-demo.gif" width="100%" alt="Memento-Teams install and launch demo">
 </p>
+<p align="center"><sub>One command to install, one command to launch. The installer sets up dependencies, downloads router assets, configures API keys, and creates the <code>memento-teams</code> command.</sub></p>
+</td></tr>
+</table>
 
 The installer will:
 - Install `uv` (if not present)
