@@ -87,8 +87,8 @@ for (name, val, color), lx, ay in zip(ref_lines, label_x, anchor_y):
 
 ax.set_xlabel("Row F1 (Avg@4)", fontsize=14, labelpad=10)
 ax.set_ylabel("Item F1 (Avg@4)", fontsize=14, labelpad=10)
-ax.set_xlim(26, 74)
-ax.set_ylim(46, 90)
+ax.set_xlim(28, 70)
+ax.set_ylim(50, 86)
 ax.set_xticks([30, 40, 50, 60, 70])
 ax.set_yticks([50, 55, 60, 65, 70, 75, 80, 85])
 ax.set_title("WideSearch-EN", fontsize=18, fontweight="bold", pad=16)
