@@ -236,7 +236,14 @@ memento-teams
 
 ## Demo
 
-https://github.com/Memento-Teams/Memento-Teams/raw/main/figures/demo.mp4
+<table>
+<tr><td>
+<p align="center">
+  <img src="figures/demo.gif" width="100%" alt="Memento-Team demo">
+</p>
+<p align="center"><sub>Memento-Team in action — from task submission to multi-worker parallel execution and final result synthesis.</sub></p>
+</td></tr>
+</table>
 
 ## Developer Notes
 
