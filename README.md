@@ -236,7 +236,7 @@ memento-teams
 
 ## Demo
 
-<!-- Demo video will be added here -->
+https://github.com/Memento-Teams/Memento-Teams/raw/main/figures/demo.mp4
 
 ## Developer Notes
 
